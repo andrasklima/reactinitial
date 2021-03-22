@@ -41,7 +41,7 @@ export default function Hotel(props) {
       <button onClick={showDetails}>{isMore ? "Show less" : "Show more"}</button>
       {isMore && renderDetails()}
       {isMore && renderRequestButton()}
-      {isSubscription && <Subscription hide={hideIt} name={props.data.name} />}
+      {isMore && isSubscription && <Subscription hide={hideIt} name={props.data.name} />}
     </div>
   );
 }

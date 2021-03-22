@@ -3,6 +3,7 @@ import LoadingMask from "./LoadingMask";
 
 export default function Subscription(props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [showForm, setShowForm] = useState(true);
   const [message, setMessage] = useState("");
   const [submitIsDisabled, setSubmitIsDisabled] = useState(true);
 
@@ -22,34 +23,39 @@ export default function Subscription(props) {
       body: JSON.stringify(data),
     };
 
+    setShowForm(false);
     setIsLoading(true);
     fetch("api/hotels/subscribe", requestOptions)
       .then((response) => response.json())
       .then((result) => {
         setMessage(result.success ? "Subscribed" : "Already subscribed");
-        setTimeout(() => { props.hide(true)}, 5000);
+        setTimeout(() => {
+          props.hide(true);
+        }, 5000);
       })
       .finally(() => setIsLoading(false));
   };
 
   return (
     <div>
-      <form>
-        <input
-          type="email"
-          id="email"
-          onChange={(e) => {
-            const value = e.target.value;
-            const validEmail = value.includes("@") && value.includes(".");
-            setSubmitIsDisabled(!validEmail);
-          }}
-        />
-        <button disabled={submitIsDisabled} onClick={handleSubmit}>
-          Submit
-        </button>
-        {isLoading && <LoadingMask />}
-        {message && <div>{message}</div>}
-      </form>
+      {showForm && (
+        <form>
+          <input
+            type="email"
+            id="email"
+            onChange={(e) => {
+              const value = e.target.value;
+              const validEmail = value.includes("@") && value.includes(".");
+              setSubmitIsDisabled(!validEmail);
+            }}
+          />
+          <button disabled={submitIsDisabled} onClick={handleSubmit}>
+            Submit
+          </button>
+        </form>
+      )}
+      {isLoading && <LoadingMask />}
+      {message && <div>{message}</div>}
     </div>
   );
 }
